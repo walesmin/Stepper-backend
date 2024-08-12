@@ -64,6 +64,7 @@ public class SecurityConfig {
                         .requestMatchers("/api/MyExercise/**").permitAll()
                         .requestMatchers("/api/members/**").permitAll()
                         .requestMatchers("/health").permitAll()
+                        .requestMatchers("/s3/upload").permitAll()
                         .requestMatchers("/admin").hasRole("ADMIN")
                         .requestMatchers("/my/**").hasAnyRole("ADMIN", "USER")
                         .anyRequest().authenticated());

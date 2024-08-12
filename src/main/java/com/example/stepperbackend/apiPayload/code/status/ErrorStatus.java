@@ -54,7 +54,14 @@ public enum ErrorStatus implements BaseErrorCode {
     //comment
     MY_COMMENTS_NOT_FOUND(HttpStatus.BAD_REQUEST, "MY_COMMENTS4001", "내가 작성한 댓글이 없습니다."),
     COMMENTS_NOT_FOUND(HttpStatus.BAD_REQUEST, "COMMENT4001", "댓글이 없습니다."),
-    PARENT_COMMENT_NOT_FOUND(HttpStatus.BAD_REQUEST, "COMMENT4002", "부모 댓글이 없습니다.");
+    PARENT_COMMENT_NOT_FOUND(HttpStatus.BAD_REQUEST, "COMMENT4002", "부모 댓글이 없습니다."),
+
+    // s3
+    DUPLICATE_IMAGE(HttpStatus.BAD_REQUEST, "S34001","이미지 파일이 중복됩니다"),
+    NO_IMAGE_EXIST(HttpStatus.BAD_REQUEST, "S34002","이미지를 찾을 수 없습니다."),
+    FAIL_DELETE(HttpStatus.BAD_REQUEST, "S34003","이미지 삭제에 실패했습니다."),
+    FAIL_UPLOAD(HttpStatus.BAD_REQUEST, "S34004","이미지 업로드에 실패했습니다."),
+    NOT_IMAGE_EXTENSION(HttpStatus.BAD_REQUEST, "S34005","파일 확장자가 없습니다.");
 
 
     private final HttpStatus httpStatus;
