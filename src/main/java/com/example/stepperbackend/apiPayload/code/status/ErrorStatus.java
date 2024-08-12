@@ -50,6 +50,7 @@ public enum ErrorStatus implements BaseErrorCode {
 
     // scrap
     SCRAP_ALREADY_EXISTS(HttpStatus.BAD_REQUEST, "SCRAP4001", "이미 스크랩된 게시물입니다."),
+    SCRAP_NOT_FOUND(HttpStatus.BAD_REQUEST, "SCRAP4001", "스크랩한 글이 없습니다."),
 
     //comment
     MY_COMMENTS_NOT_FOUND(HttpStatus.BAD_REQUEST, "MY_COMMENTS4001", "내가 작성한 댓글이 없습니다."),

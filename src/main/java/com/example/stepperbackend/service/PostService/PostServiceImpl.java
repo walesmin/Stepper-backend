@@ -1,15 +1,13 @@
 package com.example.stepperbackend.service.PostService;
 
 import com.example.stepperbackend.apiPayload.code.status.ErrorStatus;
-import com.example.stepperbackend.apiPayload.exception.handler.CommentHandler;
-import com.example.stepperbackend.apiPayload.exception.handler.MemberHandler;
-import com.example.stepperbackend.apiPayload.exception.handler.PostHandler;
-import com.example.stepperbackend.apiPayload.exception.handler.RateDiaryHandler;
+import com.example.stepperbackend.apiPayload.exception.handler.*;
 import com.example.stepperbackend.domain.Comment;
 import com.example.stepperbackend.domain.Member;
 import com.example.stepperbackend.domain.Post;
 import com.example.stepperbackend.domain.WeeklyMission;
 import com.example.stepperbackend.domain.enums.BodyPart;
+import com.example.stepperbackend.domain.mapping.Scrap;
 import com.example.stepperbackend.repository.*;
 import com.example.stepperbackend.service.badgeService.BadgeService;
 import com.example.stepperbackend.web.dto.PostDto;
@@ -47,7 +45,7 @@ public class PostServiceImpl implements PostService {
         post = postRepository.save(post);
 
         // 첫 커뮤니티 게시글 작성 완료
-        if(postRepository.getCountByMember(member) == 1){
+        if (postRepository.getCountByMember(member) == 1) {
             badgeService.putFirstBadge("첫 게시글 작성 완료", member);
         }
 
@@ -81,15 +79,15 @@ public class PostServiceImpl implements PostService {
                 .orElseThrow(() -> new MemberHandler(ErrorStatus.MEMBER_NOT_FOUND));
 
         Post post = postRepository.findById(postId)
-                .orElseThrow(()-> new PostHandler(ErrorStatus.POST_NOT_FOUND));
+                .orElseThrow(() -> new PostHandler(ErrorStatus.POST_NOT_FOUND));
 
         int likes = likeRepository.getCountByPost(post);
 
         int scraps = scrapRepository.getCountByPost(post);
 
-        int commentsCount= commentRepository.getCountByPost(post);
+        int commentsCount = commentRepository.getCountByPost(post);
 
-        return PostConverter.toViewDto(post,likes,scraps,commentsCount);
+        return PostConverter.toViewDto(post, likes, scraps, commentsCount);
     }
 
     @Override
@@ -120,15 +118,40 @@ public class PostServiceImpl implements PostService {
 
         List<Comment> comments = commentRepository.findByMember(member);
 
-        if(comments.isEmpty()) {throw new CommentHandler(ErrorStatus.MY_COMMENTS_NOT_FOUND);}
+        if (comments.isEmpty()) {
+            throw new CommentHandler(ErrorStatus.MY_COMMENTS_NOT_FOUND);
+        }
 
         return comments.stream()
                 .map(comment -> {
                     Post post = comment.getPost();
                     int likes = likeRepository.getCountByPost(post);
                     int scraps = scrapRepository.getCountByPost(post);
-                    int commentsCount= commentRepository.getCountByPost(post);
-                    return PostConverter.toViewDto(post,likes,scraps,commentsCount);
+                    int commentsCount = commentRepository.getCountByPost(post);
+                    return PostConverter.toViewDto(post, likes, scraps, commentsCount);
+                })
+                .distinct()
+                .toList();
+    }
+
+    @Override
+    public List<PostDto.PostViewDto> getScrapList(String email) {
+        Member member = memberRepository.findByEmail(email)
+                .orElseThrow(() -> new MemberHandler(ErrorStatus.MEMBER_NOT_FOUND));
+
+        List<Scrap> scraps = scrapRepository.findByMember(member);
+
+        if (scraps.isEmpty()) {
+            throw new ScrapHandler(ErrorStatus.SCRAP_NOT_FOUND);
+        }
+
+        return scraps.stream()
+                .map(scrap -> {
+                    Post post = scrap.getPost();
+                    int likes = likeRepository.getCountByPost(post);
+                    int scrapsCount = scrapRepository.getCountByPost(post);
+                    int commentsCount = commentRepository.getCountByPost(post);
+                    return PostConverter.toViewDto(post, likes, scrapsCount, commentsCount);
                 })
                 .distinct()
                 .toList();
