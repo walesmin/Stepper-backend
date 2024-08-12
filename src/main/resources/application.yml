@@ -29,8 +29,8 @@ cloud:
     s3:
       bucket: elasticbeanstalk-ap-northeast-2-880624269172
     credentials:
-        accessKey: ${ AWS_ACTION_ACCESS_KEY_ID }
-        secretKey: ${ AWS_ACTION_SECRET_ACCESS_KEY }
+        accessKey: ${AWS_ACTION_ACCESS_KEY_ID}
+        secretKey: ${AWS_ACTION_SECRET_ACCESS_KEY}
     region:
         static: ap-northeast-2
     stack:
