@@ -16,4 +16,7 @@ public interface PostService {
 
     List<PostDto.PostViewDto> getCommentsList(String email);
 
+    List<PostDto.PostViewDto> getScrapList(String email);
+
+
 }

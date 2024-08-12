@@ -111,4 +111,13 @@ public class PostController {
         List<PostDto.PostViewDto> response = postService.getCommentsList(email);
         return ApiResponse.onSuccess(response);
     }
+
+    @Operation(summary = "내가 스크랩한 글 조회 API", description = "내가 스크랩한 글 조회")
+    @GetMapping("/my_scrap")
+    public ApiResponse<List<PostDto.PostViewDto>> getScrapList(HttpServletRequest request) {
+        String token = request.getHeader("Authorization").substring(7);
+        String email = jwtUtil.getUsername(token);
+        List<PostDto.PostViewDto> response = postService.getScrapList(email);
+        return ApiResponse.onSuccess(response);
+    }
 }
