@@ -43,13 +43,18 @@ public class CommentServiceImpl implements CommentService {
         Post post = postRepository.findById(request.getPostId())
                 .orElseThrow(() -> new PostHandler(ErrorStatus.POST_NOT_FOUND));
 
+
         List<Comment> commentList = commentRepository.findByPost_IdAndMember_Id(post.getId(), member.getId());
 
         String memberName;
+        Long writerId = post.getMember().getId();
 
-        if (request.isAnonymous()) {
+
+        if(writerId.equals(member.getId())){
+            memberName = member.getName() + "(작성자)";
+        } else if (request.isAnonymous()) {
             memberName = getAnonymousName(commentList, post.getId());
-        } else {
+        } else{
             memberName = member.getName();
         }
 
@@ -75,8 +80,12 @@ public class CommentServiceImpl implements CommentService {
         List<Comment> commentList = commentRepository.findByPost_IdAndMember_Id(post.getId(), member.getId());
 
         String memberName;
+        Long writerId = post.getMember().getId();
 
-        if (request.isAnonymous()) {
+
+        if(writerId.equals(member.getId())){
+            memberName = member.getName() + "(작성자)";
+        } else if (request.isAnonymous()) {
             memberName = getAnonymousName(commentList, post.getId());
         } else {
             memberName = member.getName();
