@@ -19,3 +19,19 @@ spring:
         hbm2ddl:
           auto: update
         default_batch_fetch_size: 1000${}
+  servlet:
+    multipart:
+      max-file-size: 5MB
+      max-request-size: 10MB
+
+cloud:
+  aws:
+    s3:
+      bucket: elasticbeanstalk-ap-northeast-2-880624269172
+    credentials:
+        accessKey: ${{ secrets.AWS_ACTION_ACCESS_KEY_ID }}
+        secretKey: ${{ secrets.AWS_ACTION_SECRET_ACCESS_KEY }}
+    region:
+        static: ap-northeast-2
+    stack:
+        auto: false
