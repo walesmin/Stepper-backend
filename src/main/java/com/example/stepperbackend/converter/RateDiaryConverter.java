@@ -15,7 +15,7 @@ import java.util.stream.Collectors;
 
 public class RateDiaryConverter {
 
-    public static RateDiary toEntity(RateDiaryDto.RateDiaryWriteRequestDTO dto, ExerciseCard exerciseCard, Member member) {
+    public static RateDiary toEntity(String imageUrl, RateDiaryDto.RateDiaryWriteRequestDTO dto, ExerciseCard exerciseCard, Member member) {
         String bodyPart = exerciseCard.getBodyPart().toString();
 
         return RateDiary.builder()
@@ -23,7 +23,7 @@ public class RateDiaryConverter {
                 .bodyPart(bodyPart)
                 .conditionRate(dto.getConditionRate())
                 .painRate(dto.getPainRate())
-                .painImage(dto.getPainImage())
+                .painImage(imageUrl)
                 .painMemo(dto.getPainMemo())
                 .member(member)
                 .date(LocalDate.now())

@@ -7,11 +7,13 @@ import com.example.stepperbackend.converter.RateDiaryConverter;
 import com.example.stepperbackend.domain.*;
 import com.example.stepperbackend.domain.mapping.Badge;
 import com.example.stepperbackend.repository.*;
+import com.example.stepperbackend.service.S3Service;
 import com.example.stepperbackend.service.badgeService.BadgeService;
 import com.example.stepperbackend.web.dto.RateDiaryDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.Optional;
@@ -26,8 +28,9 @@ public class RateDiaryServiceImpl implements RateDiaryService {
     private final ExerciseCardRepository exerciseCardRepository;
 
     private final BadgeService badgeService;
+    private final S3Service s3Service;
 
-    public RateDiaryDto.RateDiaryWriteResponseDTO writeDiary(RateDiaryDto.RateDiaryWriteRequestDTO request, String memberEmail) {
+    public RateDiaryDto.RateDiaryWriteResponseDTO writeDiary(MultipartFile image, RateDiaryDto.RateDiaryWriteRequestDTO request, String memberEmail) {
         Member member = memberRepository.findByEmail(memberEmail)
                 .orElseThrow(() -> new MemberHandler(ErrorStatus.MEMBER_NOT_FOUND));
 
@@ -38,7 +41,9 @@ public class RateDiaryServiceImpl implements RateDiaryService {
             throw new RateDiaryHandler(ErrorStatus.EXERCISE_CARD_DOES_NOT_BELONG_TO_USER);
         }
 
-        RateDiary rateDiary = RateDiaryConverter.toEntity(request, exerciseCard, member);
+        String imageUrl = s3Service.saveFile(image);
+
+        RateDiary rateDiary = RateDiaryConverter.toEntity(imageUrl, request, exerciseCard, member);
         rateDiaryRepository.save(rateDiary);
 
         exerciseCard.setStatus(true);
