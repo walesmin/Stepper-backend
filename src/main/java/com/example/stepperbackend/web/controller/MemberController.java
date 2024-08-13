@@ -3,6 +3,7 @@ package com.example.stepperbackend.web.controller;
 import com.example.stepperbackend.apiPayload.ApiResponse;
 import com.example.stepperbackend.jwt.JWTUtil;
 import com.example.stepperbackend.service.MemberService.MemberService;
+import com.example.stepperbackend.service.S3Service;
 import com.example.stepperbackend.web.dto.MemberDto;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.servlet.http.HttpServletRequest;
@@ -15,6 +16,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 
 @Slf4j
@@ -31,11 +33,25 @@ public class MemberController {
 
     private final JWTUtil jwtUtil;
 
+    private final S3Service s3Service;
 
-    @Operation(summary = "회원가입 API",description = "사용자 회원가입")
+//    @Operation(summary = "회원가입 API",description = "사용자 회원가입")
+//    @PostMapping("/signup")
+//    public ApiResponse<MemberDto.MemberResponseDto> signup(@RequestBody MemberDto.MemberSignupRequestDto dto) {
+//        System.out.println("MemberController.signup");
+//        MemberDto.MemberResponseDto response = memberService.signup(dto);
+//        return ApiResponse.onSuccess(response);
+//    }
+
+    @Operation(summary = "회원가입 API", description = "사용자 회원가입")
     @PostMapping("/signup")
-    public ApiResponse<MemberDto.MemberResponseDto> signup(@RequestBody MemberDto.MemberSignupRequestDto dto) {
-        System.out.println("MemberController.signup");
+    public ApiResponse<MemberDto.MemberResponseDto> signup(@RequestPart("data") MemberDto.MemberSignupRequestDto dto,
+                                                           @RequestPart(value = "profileImage", required = false) MultipartFile profileImage) {
+        if (profileImage != null && !profileImage.isEmpty()) {
+            String profileImageUrl = s3Service.saveFile(profileImage);  // 프로필 이미지를 S3에 업로드하고 URL을 반환
+            dto.setProfileImage(profileImageUrl);  // DTO에 프로필 이미지 URL 설정
+        }
+
         MemberDto.MemberResponseDto response = memberService.signup(dto);
         return ApiResponse.onSuccess(response);
     }
