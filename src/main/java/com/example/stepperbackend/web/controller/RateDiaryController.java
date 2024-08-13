@@ -11,6 +11,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -23,10 +24,11 @@ public class RateDiaryController {
 
     @PostMapping("/write")
     @Operation(summary = "평가일지 작성 API", description = "평가일지 작성")
-    public ApiResponse<RateDiaryDto.RateDiaryWriteResponseDTO> Write(@RequestBody @Valid RateDiaryDto.RateDiaryWriteRequestDTO request) {
+    public ApiResponse<RateDiaryDto.RateDiaryWriteResponseDTO> Write(@RequestPart(value = "image", required = false) MultipartFile image,
+                                                                     @RequestPart(value = "request") @Valid RateDiaryDto.RateDiaryWriteRequestDTO request) {
         String memberId = SecurityContextHolder.getContext().getAuthentication().getName();
 
-        RateDiaryDto.RateDiaryWriteResponseDTO rateDiary = rateDiaryService.writeDiary(request, memberId);
+        RateDiaryDto.RateDiaryWriteResponseDTO rateDiary = rateDiaryService.writeDiary(image, request, memberId);
         return ApiResponse.onSuccess(rateDiary);
     }
 
