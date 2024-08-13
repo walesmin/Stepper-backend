@@ -19,6 +19,38 @@ jobs:
           java-version: 17 # (5).자바 설치
           distribution: 'adopt'
 
+      - name: write AWS_ACTION_ACCESS_KEY_ID
+        run: echo cloud.aws.credentials.accessKey=${{secrets.AWS_ACTION_ACCESS_KEY_ID}} >> env.properties
+        working-directory: ./Stepper-backend/src/main/resources
+
+      - name: write AWS_ACTION_SECRET_ACCESS_KEY
+        run: echo cloud.aws.credentials.secretKey=${{secrets.AWS_ACTION_SECRET_ACCESS_KEY}} >> env.properties
+        working-directory: ./Stepper-backend/src/main/resources
+
+      - name: write s3_bucket_name
+        run: echo cloud.aws.s3.bucket=elasticbeanstalk-ap-northeast-2-880624269172  >> env.properties
+        working-directory: ./Stepper-backend/src/main/resources
+
+      - name: write s3 region
+        run: echo cloud.aws.region.static=ap-northeast-2  >> env.properties
+        working-directory: ./Stepper-backend/src/main/resources
+
+      - name: write PROD_DATABASE_URL
+        run: echo PROD_DATABASE_URL=${{secrets.DATABASE_URL}} >> env.properties
+        working-directory: ./Stepper-backend/src/main/resources
+
+      - name: write PROD_DATABASE_PASSWORD
+        run: echo PROD_DATABASE_PASSWORD=${{secrets.DB_PASSWORD}} >> env.properties
+        working-directory: ./Stepper-backend/src/main/resources
+
+      - name: write PROD_DATABASE_USERNAME
+        run: echo PROD_DATABASE_USERNAME=${{secrets.DB_USERNAME}} >> env.properties
+        working-directory: ./Stepper-backend/src/main/resources
+
+      - name: write JWT_SECRET_KEY
+        run: echo JWT_SECRET_KEY=${{secrets.JWT_SECRET}} >> env.properties
+        working-directory: ./Stepper-backend/src/main/resources
+
       - name: Grant execute permission for gradlew
         run: chmod +x ./gradlew
         shell: bash # (6).권한 부여

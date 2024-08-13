@@ -1,0 +1,8 @@
+spring:
+  profiles:
+    group:
+      local: common, local
+      dev: common, dev
+      prod: common, prod
+  config:
+    import: classpath:/env.properties

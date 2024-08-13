@@ -1,10 +1,10 @@
 spring:
   jwt:
-    secret: vmfhaltmskdlstkfkdgodyroqkfwkdbalroqkfwkdbalaaaaaaaaaaaaaaaabbbbb
+    secret: ${JWT_SECRET}
   datasource:
-    url: jdbc:mysql://hojundb.cd8qcimkew4w.ap-northeast-2.rds.amazonaws.com:3306/stepper
-    username: root
-    password: x9547029
+    url: ${DATABASE_URL}
+    username: ${DB_USERNAME}}
+    password: ${DB_PASSWORD}
     driver-class-name: com.mysql.cj.jdbc.Driver
   sql:
     init:
@@ -23,6 +23,9 @@ spring:
     multipart:
       max-file-size: 5MB
       max-request-size: 10MB
+  config:
+    import: classpath:/env.properties
+
 
 cloud:
   aws:
