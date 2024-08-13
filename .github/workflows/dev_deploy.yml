@@ -19,6 +19,9 @@ jobs:
           java-version: 17 # (5).자바 설치
           distribution: 'adopt'
 
+      - name: Create env.properties file
+        run: touch Stepper-backend/src/main/resources/env.properties
+
       - name: write AWS_ACTION_ACCESS_KEY_ID
         run: echo cloud.aws.credentials.accessKey=${{secrets.AWS_ACTION_ACCESS_KEY_ID}} >> env.properties
         working-directory: ./Stepper-backend/src/main/resources
