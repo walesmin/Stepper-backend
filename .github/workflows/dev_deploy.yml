@@ -36,17 +36,20 @@ jobs:
       - name: Write S3 region
         run: echo cloud.aws.region.static=ap-northeast-2 >> Stepper-backend/src/main/resources/env.properties
 
-      - name: Write PROD_DATABASE_URL
-        run: echo PROD_DATABASE_URL=${{ secrets.DATABASE_URL }} >> Stepper-backend/src/main/resources/env.properties
+      - name: Write DATABASE_URL
+        run: echo spring.datasource.url=${{ secrets.DATABASE_URL }} >> Stepper-backend/src/main/resources/env.properties
 
-      - name: Write PROD_DATABASE_PASSWORD
-        run: echo PROD_DATABASE_PASSWORD=${{ secrets.DB_PASSWORD }} >> Stepper-backend/src/main/resources/env.properties
+      - name: Write DATABASE_PASSWORD
+        run: echo spring.datasource.password=${{ secrets.DB_PASSWORD }} >> Stepper-backend/src/main/resources/env.properties
 
-      - name: Write PROD_DATABASE_USERNAME
-        run: echo PROD_DATABASE_USERNAME=${{ secrets.DB_USERNAME }} >> Stepper-backend/src/main/resources/env.properties
+      - name: Write DATABASE_USERNAME
+        run: echo spring.datasource.username=${{ secrets.DB_USERNAME }} >> Stepper-backend/src/main/resources/env.properties
+
+      - name: Write driver-class
+        run: echo spring.datasource.driver-class-name=com.mysql.cj.jdbc.Driver >> Stepper-backend/src/main/resources/env.properties
 
       - name: Write JWT_SECRET_KEY
-        run: echo JWT_SECRET_KEY=${{ secrets.JWT_SECRET }} >> Stepper-backend/src/main/resources/env.properties
+        run: echo spring.jwt.secret=${{ secrets.JWT_SECRET }} >> Stepper-backend/src/main/resources/env.properties
 
       - name: Grant execute permission for gradlew
         run: chmod +x ./gradlew
