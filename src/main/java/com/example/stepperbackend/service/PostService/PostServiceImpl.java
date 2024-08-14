@@ -9,11 +9,13 @@ import com.example.stepperbackend.domain.WeeklyMission;
 import com.example.stepperbackend.domain.enums.BodyPart;
 import com.example.stepperbackend.domain.mapping.Scrap;
 import com.example.stepperbackend.repository.*;
+import com.example.stepperbackend.service.S3Service;
 import com.example.stepperbackend.service.badgeService.BadgeService;
 import com.example.stepperbackend.web.dto.PostDto;
 import com.example.stepperbackend.converter.PostConverter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -29,9 +31,15 @@ public class PostServiceImpl implements PostService {
     private final LikeRepository likeRepository;
     private final ScrapRepository scrapRepository;
     private final CommentRepository commentRepository;
+    private final S3Service s3Service;
 
     @Override
-    public PostDto.PostResponseDto createPost(PostDto.PostRequestDto postRequestDto, String email) {
+    public PostDto.PostResponseDto createPost(MultipartFile image, PostDto.PostRequestDto postRequestDto, String email) {
+        if (image != null && !image.isEmpty()) {
+            String imageUrl = s3Service.saveFile(image);
+            postRequestDto.setImageUrl(imageUrl);
+        }
+
         Member member = memberRepository.findByEmail(email)
                 .orElseThrow(() -> new MemberHandler(ErrorStatus.MEMBER_NOT_FOUND));
 

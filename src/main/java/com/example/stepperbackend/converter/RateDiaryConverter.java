@@ -3,10 +3,7 @@ package com.example.stepperbackend.converter;
 
 import com.example.stepperbackend.domain.ExerciseCard;
 import com.example.stepperbackend.domain.Member;
-import com.example.stepperbackend.domain.MyExercise;
 import com.example.stepperbackend.domain.RateDiary;
-import com.example.stepperbackend.domain.enums.BodyPart;
-import com.example.stepperbackend.web.dto.MyExerciseDto;
 import com.example.stepperbackend.web.dto.RateDiaryDto;
 
 import java.time.LocalDate;
@@ -15,7 +12,7 @@ import java.util.stream.Collectors;
 
 public class RateDiaryConverter {
 
-    public static RateDiary toEntity(String imageUrl, RateDiaryDto.RateDiaryWriteRequestDTO dto, ExerciseCard exerciseCard, Member member) {
+    public static RateDiary toEntity(RateDiaryDto.RateDiaryWriteRequestDTO dto, ExerciseCard exerciseCard, Member member) {
         String bodyPart = exerciseCard.getBodyPart().toString();
 
         return RateDiary.builder()
@@ -23,7 +20,7 @@ public class RateDiaryConverter {
                 .bodyPart(bodyPart)
                 .conditionRate(dto.getConditionRate())
                 .painRate(dto.getPainRate())
-                .painImage(imageUrl)
+                .painImage(dto.getPainImage())
                 .painMemo(dto.getPainMemo())
                 .member(member)
                 .date(LocalDate.now())

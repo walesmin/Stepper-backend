@@ -1,10 +1,8 @@
 package com.example.stepperbackend.web.dto;
 
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
+
 import java.time.LocalDate;
 
 
@@ -12,6 +10,7 @@ import java.time.LocalDate;
 public class RateDiaryDto {
 
     @Getter
+    @Setter
     public static class RateDiaryWriteRequestDTO {
         private Long exerciseCardId;
         private Long conditionRate;

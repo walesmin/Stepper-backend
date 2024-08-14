@@ -41,9 +41,12 @@ public class RateDiaryServiceImpl implements RateDiaryService {
             throw new RateDiaryHandler(ErrorStatus.EXERCISE_CARD_DOES_NOT_BELONG_TO_USER);
         }
 
-        String imageUrl = s3Service.saveFile(image);
+        if (image != null && !image.isEmpty()) {
+            String imageUrl = s3Service.saveFile(image);
+            request.setPainImage(imageUrl);
+        }
 
-        RateDiary rateDiary = RateDiaryConverter.toEntity(imageUrl, request, exerciseCard, member);
+        RateDiary rateDiary = RateDiaryConverter.toEntity(request, exerciseCard, member);
         rateDiaryRepository.save(rateDiary);
 
         exerciseCard.setStatus(true);

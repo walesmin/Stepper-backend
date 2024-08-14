@@ -3,6 +3,7 @@ package com.example.stepperbackend.web.controller;
 import com.example.stepperbackend.apiPayload.ApiResponse;
 import com.example.stepperbackend.jwt.JWTUtil;
 import com.example.stepperbackend.service.PostService.PostService;
+import com.example.stepperbackend.service.S3Service;
 import com.example.stepperbackend.service.scrapService.ScrapService;
 import com.example.stepperbackend.service.likeService.LikeService;
 import com.example.stepperbackend.web.dto.LikeDto;
@@ -13,6 +14,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -27,14 +29,17 @@ public class PostController {
     private final PostService postService;
     private final ScrapService scrapService;
     private final LikeService likeService;
-  
+    private final S3Service s3Service;
+
 
     @Operation(summary = "게시글 작성 API", description = "사용자 게시글 작성")
     @PostMapping("/write")
-    public ApiResponse<PostDto.PostResponseDto> createPost(@RequestBody PostDto.PostRequestDto postRequestDto, HttpServletRequest request) {
+    public ApiResponse<PostDto.PostResponseDto> createPost(@RequestPart("data") PostDto.PostRequestDto postRequestDto,
+                                                           @RequestPart(value = "image", required = false) MultipartFile image,
+                                                           HttpServletRequest request) {
         String token = request.getHeader("Authorization").substring(7);
         String email = jwtUtil.getUsername(token);
-        PostDto.PostResponseDto response = postService.createPost(postRequestDto, email);
+        PostDto.PostResponseDto response = postService.createPost(image, postRequestDto, email);
         return ApiResponse.onSuccess(response);
     }
 
