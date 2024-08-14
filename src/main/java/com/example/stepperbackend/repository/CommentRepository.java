@@ -24,5 +24,6 @@ public interface CommentRepository extends JpaRepository<Comment, Long> {
     @Query("SELECT e FROM Comment e WHERE e.post.id = :postId")
     List<Comment> findByPostId(@Param("postId") Long postId);
 
-
+    // 특정 댓글의 대댓글들을 조회하는 메소드
+    List<Comment> findByParentComment(Comment parentComment);
 }

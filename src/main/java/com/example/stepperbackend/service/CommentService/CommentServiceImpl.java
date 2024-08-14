@@ -120,5 +120,14 @@ public class CommentServiceImpl implements CommentService {
 
         return commentList.stream().map(CommentConverter::toDto).collect(Collectors.toList());
     }
+
+    @Override
+    // 특정 댓글의 대댓글(답글)을 조회하는 서비스 메소드
+    public List<CommentDto.CommentResponseDto> getReply(Long parentCommentId) {
+        Comment parentComment = commentRepository.findById(parentCommentId)
+                .orElseThrow(() -> new RuntimeException("Parent comment not found"));
+        List<Comment> replyList = commentRepository.findByParentComment(parentComment);
+        return replyList.stream().map(CommentConverter::toDto).collect(Collectors.toList());
+    }
 }
 
