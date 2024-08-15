@@ -48,6 +48,8 @@ public class Member extends BaseEntity {
 
     private boolean perAgree;
 
+    private String firebaseToken;
+
     //private LocalDate createdAt;
     //private LocalDate updatedAt;
 
