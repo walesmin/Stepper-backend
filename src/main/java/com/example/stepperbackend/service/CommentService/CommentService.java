@@ -12,6 +12,7 @@ public interface CommentService {
 
     CommentDto.CommentResponseDto writeReply(CommentDto.ReplyRequestDto request, String email);
 
+    List<CommentDto.CommentResponseDto> getReply(Long parentCommentId);
 }
 
 

@@ -9,6 +9,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
@@ -38,6 +39,14 @@ public class CommentController {
         List<CommentDto.CommentResponseDto> response = commentService.getComment(postId);
         return ApiResponse.onSuccess(response);
     }
+
+    @Operation(summary = "대댓글 조회 API", description = "대댓글 조회")
+    @GetMapping("/{parentCommentId}/reply")
+    public ResponseEntity<List<CommentDto.CommentResponseDto>> getReply(@PathVariable Long parentCommentId) {
+        List<CommentDto.CommentResponseDto> reply = commentService.getReply(parentCommentId);
+        return ResponseEntity.ok(reply);
+    }
+
 
     @Operation(summary = "대댓글 작성 API", description = "대댓글 작성")
     @PostMapping("/reply")
