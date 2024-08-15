@@ -11,8 +11,6 @@ public interface CommentService {
     List<CommentDto.CommentResponseDto> getComment(Long postId);
 
     CommentDto.CommentResponseDto writeReply(CommentDto.ReplyRequestDto request, String email);
-
-    List<CommentDto.CommentResponseDto> getReply(Long parentCommentId);
 }
 
 

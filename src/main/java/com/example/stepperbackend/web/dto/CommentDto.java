@@ -7,6 +7,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 public class CommentDto {
 
@@ -28,6 +29,7 @@ public class CommentDto {
         private String memberName;
         private String content;
         private LocalDateTime dateTime;
+        private List<ReplyResponseDto> replyList;
     }
 
     @Getter
@@ -38,4 +40,12 @@ public class CommentDto {
         private boolean anonymous;
     }
 
+    @Builder
+    @Getter
+    public static class ReplyResponseDto {
+        private Long postId;
+        private Long parentCommentId;
+        private String content;
+        private boolean anonymous;
+    }
 }

@@ -1,9 +1,11 @@
 package com.example.stepperbackend.service.CommentService;
 
 import com.example.stepperbackend.apiPayload.code.status.ErrorStatus;
+import com.example.stepperbackend.apiPayload.exception.handler.BadgeHandler;
 import com.example.stepperbackend.apiPayload.exception.handler.CommentHandler;
 import com.example.stepperbackend.apiPayload.exception.handler.MemberHandler;
 import com.example.stepperbackend.apiPayload.exception.handler.PostHandler;
+import com.example.stepperbackend.converter.BadgeConverter;
 import com.example.stepperbackend.converter.CommentConverter;
 import com.example.stepperbackend.converter.PostConverter;
 import com.example.stepperbackend.domain.Comment;
@@ -12,6 +14,7 @@ import com.example.stepperbackend.domain.Post;
 import com.example.stepperbackend.repository.CommentRepository;
 import com.example.stepperbackend.repository.MemberRepository;
 import com.example.stepperbackend.repository.PostRepository;
+import com.example.stepperbackend.web.dto.BadgeDto;
 import com.example.stepperbackend.web.dto.CommentDto;
 import com.example.stepperbackend.web.dto.PostDto;
 import lombok.RequiredArgsConstructor;
@@ -112,21 +115,16 @@ public class CommentServiceImpl implements CommentService {
     @Override
     public List<CommentDto.CommentResponseDto> getComment(Long postId) {
 
-        List<Comment> commentList = commentRepository.findByPostId(postId);
+        List<Comment> commentList = commentRepository.findAllByPostId(postId).stream().collect(Collectors.toList());
 
-        if (commentList.isEmpty()) {
-            throw new CommentHandler(ErrorStatus.COMMENTS_NOT_FOUND);
-        }
+        List<CommentDto.CommentResponseDto> commentResponseList = commentList.stream()
+                .map(comment -> {
+                    List<Comment> replyList = commentRepository.findByParentComment(comment);
+                    comment.setReplies(replyList);
+                    return CommentConverter.toCommentResponseDto(replyList, comment);
+                }).collect(Collectors.toList());
 
-        return commentList.stream().map(CommentConverter::toDto).collect(Collectors.toList());
-    }
-
-    @Override
-    public List<CommentDto.CommentResponseDto> getReply(Long parentCommentId) {
-        Comment parentComment = commentRepository.findById(parentCommentId)
-                .orElseThrow(() -> new RuntimeException("Parent comment not found"));
-        List<Comment> replyList = commentRepository.findByParentComment(parentComment);
-        return replyList.stream().map(CommentConverter::toDto).collect(Collectors.toList());
+        return commentResponseList;
     }
 }
 
