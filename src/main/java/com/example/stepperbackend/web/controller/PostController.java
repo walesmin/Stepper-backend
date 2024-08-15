@@ -71,6 +71,15 @@ public class PostController {
         return ApiResponse.onSuccess(response);
     }
 
+    @Operation(summary = "게시글 위클리 조회 API", description = "게시글 위클리 조회")
+    @GetMapping("/{weeklyMissionId}/posts/weekly")
+    public ApiResponse<List<PostDto.PostViewDto>> getWeeklyPost(@PathVariable Long weeklyMissionId, HttpServletRequest request) {
+        String token = request.getHeader("Authorization").substring(7);
+        String email = jwtUtil.getUsername(token);
+        List<PostDto.PostViewDto> response = postService.getWeeklyPost(weeklyMissionId, email);
+        return ApiResponse.onSuccess(response);
+    }
+
 
     @Operation(summary = "좋아요 등록 API", description = "게시글 좋아요 등록")
     @PostMapping("/{postId}/like")

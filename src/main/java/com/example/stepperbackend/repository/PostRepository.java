@@ -21,5 +21,8 @@ public interface PostRepository extends JpaRepository<Post, Long> {
     @Query("SELECT e FROM Post e WHERE e.bodyPart = :bodypart")
     List<Post> findByCategoryId(@Param("bodypart") BodyPart bodyPart);
 
+    @Query("SELECT e FROM Post e WHERE e.weeklyMission.id = :weeklyMissionId")
+    List<Post> findByWeeklyMissionId(@Param("weeklyMissionId") Long weeklyMissionId);
+
     Optional<Post> findAllByMemberId(Long memberId);
 }
