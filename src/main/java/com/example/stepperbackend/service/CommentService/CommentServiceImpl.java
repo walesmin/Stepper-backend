@@ -122,7 +122,6 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
-    // 특정 댓글의 대댓글(답글)을 조회하는 서비스 메소드
     public List<CommentDto.CommentResponseDto> getReply(Long parentCommentId) {
         Comment parentComment = commentRepository.findById(parentCommentId)
                 .orElseThrow(() -> new RuntimeException("Parent comment not found"));

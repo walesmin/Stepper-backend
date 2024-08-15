@@ -19,5 +19,5 @@ public interface PostService {
 
     List<PostDto.PostViewDto> getScrapList(String email);
 
-
+    List<PostDto.PostViewDto> getWeeklyPost(Long weeklyMissionId, String email);
 }

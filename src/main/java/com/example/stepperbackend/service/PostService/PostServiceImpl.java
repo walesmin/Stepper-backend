@@ -120,6 +120,27 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
+    public List<PostDto.PostViewDto> getWeeklyPost(Long weeklyMissionId, String email) {
+        Member member = memberRepository.findByEmail(email)
+                .orElseThrow(() -> new MemberHandler(ErrorStatus.MEMBER_NOT_FOUND));
+
+        List<PostDto.PostViewDto> postList = postRepository.findByWeeklyMissionId(weeklyMissionId).stream()
+                .map(post -> {
+                    int likes = likeRepository.getCountByPost(post);
+                    int scraps = scrapRepository.getCountByPost(post);
+                    int comments = commentRepository.getCountByPost(post);
+                    return PostConverter.toViewDto(post, scraps, likes, comments);
+                })
+                .collect(Collectors.toList());
+
+        if (postList.isEmpty()) {
+            throw new PostHandler(ErrorStatus.WEEKLY_POST_LIST_NOT_FOUND);
+        }
+
+        return postList;
+    }
+
+    @Override
     public List<PostDto.PostViewDto> getCommentsList(String email) {
         Member member = memberRepository.findByEmail(email)
                 .orElseThrow(() -> new MemberHandler(ErrorStatus.MEMBER_NOT_FOUND));
