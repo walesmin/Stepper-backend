@@ -1,11 +1,8 @@
 package com.example.stepperbackend.converter;
 
-import com.example.stepperbackend.domain.BadgeCategory;
 import com.example.stepperbackend.domain.Comment;
 import com.example.stepperbackend.domain.Member;
 import com.example.stepperbackend.domain.Post;
-import com.example.stepperbackend.domain.mapping.Badge;
-import com.example.stepperbackend.web.dto.BadgeDto;
 import com.example.stepperbackend.web.dto.CommentDto;
 
 import java.time.LocalDateTime;
@@ -46,10 +43,10 @@ public class CommentConverter {
 
     }
 
-    public static CommentDto.CommentResponseDto toCommentResponseDto(List<Comment> replyList, Comment comment){
+    public static CommentDto.CommentResponseDto toCommentResponseDto(List<CommentDto.ReplyResponseDto> replyList, Comment comment){
 
-        List<CommentDto.ReplyResponseDto> replyDtoList = replyList.stream()
-                .map(CommentConverter::toReplyDto).collect(Collectors.toList());
+        /*List<CommentDto.ReplyResponseDto> replyDtoList = replyList.stream()
+                .map(CommentConverter::toReplyDto).collect(Collectors.toList());*/
 
         return CommentDto.CommentResponseDto.builder()
                 .postId(comment.getPost().getId())
@@ -58,7 +55,7 @@ public class CommentConverter {
                 .profileImage(comment.getMember().getProfileImage())
                 .content(comment.getContent())
                 .dateTime(comment.getCreatedAt())
-                .replyList(replyDtoList)
+                .replyList(replyList)
                 .build();
     }
 
