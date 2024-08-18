@@ -5,6 +5,7 @@ import lombok.Builder;
 import lombok.Data;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 public class PostDto {
 
@@ -31,13 +32,15 @@ public class PostDto {
         private String weeklyMissionTitle;
         private LocalDateTime createdAt;
         private LocalDateTime updatedAt;
+        private List<ImageDto.ImageResponseDto> imageList;
+
     }
 
     @Data
     @Builder
     public static class PostViewDto {
         private Long id;
-        private String imageUrl;
+        //private String imageUrl;
         private String title;
         private String body;
         private String authorEmail;
@@ -49,5 +52,6 @@ public class PostDto {
         private String weeklyMissionTitle;
         private LocalDateTime createdAt;
         private LocalDateTime updatedAt;
+        private List<ImageDto.ImageResponseDto> imageList;
     }
 }
