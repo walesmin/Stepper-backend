@@ -40,7 +40,7 @@ public class PostDto {
     @Builder
     public static class PostViewDto {
         private Long id;
-        //private String imageUrl;
+        private String profileImageUrl;
         private String title;
         private String body;
         private String authorEmail;
