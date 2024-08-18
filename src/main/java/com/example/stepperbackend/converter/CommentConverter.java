@@ -39,6 +39,9 @@ public class CommentConverter {
                 .parentCommentId(comment.getParentComment().getId())
                 .content(comment.getContent())
                 .anonymous(comment.isAnonymous())
+                .profileImage(comment.getMember().getProfileImage())
+                .localDateTime(comment.getCreatedAt())
+                .memberName(comment.getMember().getName())
                 .build();
 
     }
