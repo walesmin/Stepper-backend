@@ -2,10 +2,8 @@ package com.example.stepperbackend.service.PostService;
 
 import com.example.stepperbackend.apiPayload.code.status.ErrorStatus;
 import com.example.stepperbackend.apiPayload.exception.handler.*;
-import com.example.stepperbackend.domain.Comment;
-import com.example.stepperbackend.domain.Member;
-import com.example.stepperbackend.domain.Post;
-import com.example.stepperbackend.domain.WeeklyMission;
+import com.example.stepperbackend.converter.ImageConverter;
+import com.example.stepperbackend.domain.*;
 import com.example.stepperbackend.domain.enums.BodyPart;
 import com.example.stepperbackend.domain.mapping.Scrap;
 import com.example.stepperbackend.repository.*;
@@ -32,12 +30,14 @@ public class PostServiceImpl implements PostService {
     private final ScrapRepository scrapRepository;
     private final CommentRepository commentRepository;
     private final S3Service s3Service;
+    private final ImageRepository imageRepository;
 
     @Override
-    public PostDto.PostResponseDto createPost(MultipartFile image, PostDto.PostRequestDto postRequestDto, String email) {
-        if (image != null && !image.isEmpty()) {
-            String imageUrl = s3Service.saveFile(image);
-            postRequestDto.setImageUrl(imageUrl);
+    public PostDto.PostResponseDto createPost(List<MultipartFile> images, PostDto.PostRequestDto postRequestDto, String email) {
+        //이미지 url 가져오기
+        List<String> imageUrlList = null;
+        if (images != null && !images.isEmpty()) {
+            imageUrlList = s3Service.saveFiles(images);
         }
 
         Member member = memberRepository.findByEmail(email)
@@ -48,16 +48,24 @@ public class PostServiceImpl implements PostService {
             weeklyMission = weeklyMissionRepository.findById(postRequestDto.getWeeklyMissionId()).orElse(null);
         }
 
-
         Post post = PostConverter.toEntity(postRequestDto, member, weeklyMission);
-        post = postRepository.save(post);
+        postRepository.save(post);
+
+        //이미지 저장
+        List<Image> imageList = imageUrlList.stream()
+                .map(imageUrl -> {
+                    Image image = ImageConverter.toEntity(imageUrl, post);
+                    return imageRepository.save(image);
+                })
+                .collect(Collectors.toList());
+        post.setImageList(imageList);
 
         // 첫 커뮤니티 게시글 작성 완료
         if (postRepository.getCountByMember(member) == 1) {
             badgeService.putFirstBadge("첫 게시글 작성 완료", member);
         }
 
-        return PostConverter.toDto(post);
+        return PostConverter.toDto(post, imageList);
     }
 
     @Override
@@ -70,7 +78,8 @@ public class PostServiceImpl implements PostService {
                     int likes = likeRepository.getCountByPost(post);
                     int scraps = scrapRepository.getCountByPost(post);
                     int comments = commentRepository.getCountByPost(post);
-                    return PostConverter.toViewDto(post, scraps, likes, comments);
+                    List<Image> imageList = imageRepository.findAllByPost(post);
+                    return PostConverter.toViewDto(post, scraps, likes, comments, imageList);
                 })
                 .collect(Collectors.toList());
 
@@ -95,7 +104,9 @@ public class PostServiceImpl implements PostService {
 
         int commentsCount = commentRepository.getCountByPost(post);
 
-        return PostConverter.toViewDto(post, likes, scraps, commentsCount);
+        List<Image> imageList = imageRepository.findAllByPost(post);
+
+        return PostConverter.toViewDto(post, likes, scraps, commentsCount, imageList);
     }
 
     @Override
@@ -108,7 +119,8 @@ public class PostServiceImpl implements PostService {
                     int likes = likeRepository.getCountByPost(post);
                     int scraps = scrapRepository.getCountByPost(post);
                     int comments = commentRepository.getCountByPost(post);
-                    return PostConverter.toViewDto(post, scraps, likes, comments);
+                    List<Image> imageList = imageRepository.findAllByPost(post);
+                    return PostConverter.toViewDto(post, scraps, likes, comments, imageList);
                 })
                 .collect(Collectors.toList());
 
@@ -129,7 +141,8 @@ public class PostServiceImpl implements PostService {
                     int likes = likeRepository.getCountByPost(post);
                     int scraps = scrapRepository.getCountByPost(post);
                     int comments = commentRepository.getCountByPost(post);
-                    return PostConverter.toViewDto(post, scraps, likes, comments);
+                    List<Image> imageList = imageRepository.findAllByPost(post);
+                    return PostConverter.toViewDto(post, scraps, likes, comments, imageList);
                 })
                 .collect(Collectors.toList());
 
@@ -157,7 +170,8 @@ public class PostServiceImpl implements PostService {
                     int likes = likeRepository.getCountByPost(post);
                     int scraps = scrapRepository.getCountByPost(post);
                     int commentsCount = commentRepository.getCountByPost(post);
-                    return PostConverter.toViewDto(post, likes, scraps, commentsCount);
+                    List<Image> imageList = imageRepository.findAllByPost(post);
+                    return PostConverter.toViewDto(post, likes, scraps, commentsCount, imageList);
                 })
                 .distinct()
                 .toList();
@@ -180,7 +194,8 @@ public class PostServiceImpl implements PostService {
                     int likes = likeRepository.getCountByPost(post);
                     int scrapsCount = scrapRepository.getCountByPost(post);
                     int commentsCount = commentRepository.getCountByPost(post);
-                    return PostConverter.toViewDto(post, likes, scrapsCount, commentsCount);
+                    List<Image> imageList = imageRepository.findAllByPost(post);
+                    return PostConverter.toViewDto(post, likes, scrapsCount, commentsCount, imageList);
                 })
                 .distinct()
                 .toList();

@@ -35,11 +35,11 @@ public class PostController {
     @Operation(summary = "게시글 작성 API", description = "사용자 게시글 작성")
     @PostMapping("/write")
     public ApiResponse<PostDto.PostResponseDto> createPost(@RequestPart("data") PostDto.PostRequestDto postRequestDto,
-                                                           @RequestPart(value = "image", required = false) MultipartFile image,
+                                                           @RequestPart(value = "image", required = false) List<MultipartFile> images,
                                                            HttpServletRequest request) {
         String token = request.getHeader("Authorization").substring(7);
         String email = jwtUtil.getUsername(token);
-        PostDto.PostResponseDto response = postService.createPost(image, postRequestDto, email);
+        PostDto.PostResponseDto response = postService.createPost(images, postRequestDto, email);
         return ApiResponse.onSuccess(response);
     }
 
