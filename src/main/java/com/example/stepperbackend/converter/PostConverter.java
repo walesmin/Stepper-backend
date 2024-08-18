@@ -52,7 +52,7 @@ public class PostConverter {
 
         return PostDto.PostViewDto.builder()
                 .id(post.getId())
-                //.imageUrl(post.getImageUrl())
+                .profileImageUrl(post.getMember().getProfileImage())
                 .title(post.getTitle())
                 .body(post.getBody())
                 .bodyPart(post.getBodyPart().toString())
