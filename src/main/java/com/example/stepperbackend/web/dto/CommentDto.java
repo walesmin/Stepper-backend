@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Locale;
 
 public class CommentDto {
 
@@ -47,5 +48,8 @@ public class CommentDto {
         private Long parentCommentId;
         private String content;
         private boolean anonymous;
+        private String profileImage;
+        private LocalDateTime localDateTime;
+        private String memberName;
     }
 }
