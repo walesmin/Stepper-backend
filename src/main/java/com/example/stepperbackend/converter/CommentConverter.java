@@ -6,6 +6,8 @@ import com.example.stepperbackend.domain.Post;
 import com.example.stepperbackend.web.dto.CommentDto;
 
 import java.time.LocalDateTime;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class CommentConverter {
 
@@ -28,6 +30,37 @@ public class CommentConverter {
                 .profileImage(comment.getMember().getProfileImage())
                 .content(comment.getContent())
                 .dateTime(comment.getCreatedAt())
+                .build();
+    }
+
+    public static CommentDto.ReplyResponseDto toReplyDto(Comment comment) {
+        return CommentDto.ReplyResponseDto.builder()
+                .postId(comment.getPost().getId())
+                .parentCommentId(comment.getParentComment().getId())
+                .content(comment.getContent())
+                .anonymous(comment.isAnonymous())
+                .profileImage(comment.getMember().getProfileImage())
+                .localDateTime(comment.getCreatedAt())
+                .memberName(comment.getAnonymousName())
+                .build();
+
+
+
+    }
+
+    public static CommentDto.CommentResponseDto toCommentResponseDto(List<CommentDto.ReplyResponseDto> replyList, Comment comment){
+
+        /*List<CommentDto.ReplyResponseDto> replyDtoList = replyList.stream()
+                .map(CommentConverter::toReplyDto).collect(Collectors.toList());*/
+
+        return CommentDto.CommentResponseDto.builder()
+                .postId(comment.getPost().getId())
+                .commentId(comment.getId())
+                .memberName(comment.getAnonymousName())
+                .profileImage(comment.getMember().getProfileImage())
+                .content(comment.getContent())
+                .dateTime(comment.getCreatedAt())
+                .replyList(replyList)
                 .build();
     }
 

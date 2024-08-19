@@ -40,13 +40,6 @@ public class CommentController {
         return ApiResponse.onSuccess(response);
     }
 
-    @Operation(summary = "대댓글 조회 API", description = "대댓글 조회")
-    @GetMapping("/{parentCommentId}/reply")
-    public ResponseEntity<List<CommentDto.CommentResponseDto>> getReply(@PathVariable Long parentCommentId) {
-        List<CommentDto.CommentResponseDto> reply = commentService.getReply(parentCommentId);
-        return ResponseEntity.ok(reply);
-    }
-
 
     @Operation(summary = "대댓글 작성 API", description = "대댓글 작성")
     @PostMapping("/reply")

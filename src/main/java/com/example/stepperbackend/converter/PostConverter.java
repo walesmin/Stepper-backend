@@ -1,10 +1,16 @@
 package com.example.stepperbackend.converter;
 
+import com.example.stepperbackend.domain.Image;
 import com.example.stepperbackend.domain.Member;
 import com.example.stepperbackend.domain.Post;
 import com.example.stepperbackend.domain.WeeklyMission;
 import com.example.stepperbackend.domain.enums.BodyPart;
+import com.example.stepperbackend.web.dto.BadgeDto;
+import com.example.stepperbackend.web.dto.ImageDto;
 import com.example.stepperbackend.web.dto.PostDto;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class PostConverter {
 
@@ -13,39 +19,44 @@ public class PostConverter {
                 .imageUrl(dto.getImageUrl())
                 .title(dto.getTitle())
                 .body(dto.getBody())
-                .bodyPart(BodyPart.valueOf(dto.getBodyPart().toString()))
-                .subCategory(dto.getSubCategory())
+                .bodyPart(dto.getBodyPart() != null ? BodyPart.valueOf(dto.getBodyPart()) : null)
+                .subCategory(dto.getSubCategory() != null ? dto.getSubCategory() : null)
                 .member(member)
-                .weeklyMission(weeklyMission)
+                .weeklyMission(weeklyMission != null ? weeklyMission : null)
                 .build();
     }
 
-    public static PostDto.PostResponseDto toDto(Post post) {
+    public static PostDto.PostResponseDto toDto(Post post, List<Image> imageList) {
+        List<ImageDto.ImageResponseDto> imageDtoList = imageList.stream()
+                .map(ImageConverter::toDto).collect(Collectors.toList());
+
         return PostDto.PostResponseDto.builder()
                 .id(post.getId())
-                .imageUrl(post.getImageUrl())
+                //.imageUrl(post.getImageUrl())
                 .title(post.getTitle())
                 .body(post.getBody())
-                .bodyPart(post.getBodyPart().toString())
-                .authorEmail(post.getMember().getEmail())
-                .subCategory(post.getSubCategory())
-                //.weeklyMissionTitle(post.getWeeklyMission() != null ? post.getWeeklyMission().getMissionTitle() : null)
+                .bodyPart(post.getBodyPart() != null ? post.getBodyPart().toString() : null)
+                .authorEmail(post.getMember().getEmail() != null ? post.getMember().getEmail() : null)
+                .subCategory(post.getSubCategory() != null? post.getSubCategory(): null)
                 .weeklyMissionTitle(post.getWeeklyMission() != null ? post.getWeeklyMission().getMissionTitle() : null)
                 .createdAt(post.getCreatedAt())
                 .updatedAt(post.getUpdatedAt())
+                .imageList(imageDtoList)
                 .build();
     }
 
-    public static PostDto.PostViewDto toViewDto(Post post, int likes, int scraps, int commentsCount) {
+    public static PostDto.PostViewDto toViewDto(Post post, int likes, int scraps, int commentsCount, List<Image> imageList) {
+        List<ImageDto.ImageResponseDto> imageDtoList = imageList.stream()
+                .map(ImageConverter::toDto).collect(Collectors.toList());
+
         return PostDto.PostViewDto.builder()
                 .id(post.getId())
-                .imageUrl(post.getImageUrl())
+                .profileImageUrl(post.getMember().getProfileImage())
                 .title(post.getTitle())
                 .body(post.getBody())
-                .bodyPart(post.getBodyPart().toString())
+                .bodyPart(post.getBodyPart() != null? post.getBodyPart().toString(): null)
                 .authorEmail(post.getMember().getEmail())
-                .subCategory(post.getSubCategory())
-                //
+                .subCategory(post.getSubCategory() != null? post.getSubCategory(): null)
                 .likes(likes)
                 .scraps(scraps)
                 .commentsCount(commentsCount)
@@ -53,6 +64,7 @@ public class PostConverter {
                 .weeklyMissionTitle(post.getWeeklyMission() != null ? post.getWeeklyMission().getMissionTitle() : null)
                 .createdAt(post.getCreatedAt())
                 .updatedAt(post.getUpdatedAt())
+                .imageList(imageDtoList)
                 .build();
     }
 }
