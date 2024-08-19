@@ -30,6 +30,7 @@ public class MemberDto {
         private boolean perAgree;
         private LocalDate createdAt;
         private LocalDate updatedAt;
+        //private String firebaseToken;
     }
 
     @Data
@@ -49,8 +50,11 @@ public class MemberDto {
     }
 
     @Data
+    @NoArgsConstructor
+    @AllArgsConstructor
     public static class MemberLoginRequestDto {
         private String email;
         private String password;
+        private String firebaseToken;
     }
 }
