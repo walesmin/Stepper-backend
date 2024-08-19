@@ -19,10 +19,10 @@ public class PostConverter {
                 .imageUrl(dto.getImageUrl())
                 .title(dto.getTitle())
                 .body(dto.getBody())
-                .bodyPart(BodyPart.valueOf(dto.getBodyPart().toString()))
-                .subCategory(dto.getSubCategory())
+                .bodyPart(dto.getBodyPart() != null ? BodyPart.valueOf(dto.getBodyPart()) : null)
+                .subCategory(dto.getSubCategory() != null ? dto.getSubCategory() : null)
                 .member(member)
-                .weeklyMission(weeklyMission)
+                .weeklyMission(weeklyMission != null ? weeklyMission : null)
                 .build();
     }
 
@@ -35,8 +35,8 @@ public class PostConverter {
                 //.imageUrl(post.getImageUrl())
                 .title(post.getTitle())
                 .body(post.getBody())
-                .bodyPart(post.getBodyPart().toString())
-                .authorEmail(post.getMember().getEmail())
+                .bodyPart(post.getBodyPart() != null ? post.getBodyPart().toString() : null)
+                .authorEmail(post.getMember().getEmail() != null ? post.getMember().getEmail() : null)
                 .subCategory(post.getSubCategory())
                 //.weeklyMissionTitle(post.getWeeklyMission() != null ? post.getWeeklyMission().getMissionTitle() : null)
                 .weeklyMissionTitle(post.getWeeklyMission() != null ? post.getWeeklyMission().getMissionTitle() : null)

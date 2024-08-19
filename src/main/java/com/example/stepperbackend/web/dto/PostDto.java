@@ -3,19 +3,24 @@ package com.example.stepperbackend.web.dto;
 import com.example.stepperbackend.domain.enums.SubCategory;
 import lombok.Builder;
 import lombok.Data;
+import lombok.Getter;
+import org.springframework.lang.Nullable;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
 public class PostDto {
 
-    @Data
+    @Getter
     public static class PostRequestDto {
         private String imageUrl;
         private String title;
         private String body;
+        @Nullable
         private String bodyPart;
+        @Nullable
         private SubCategory subCategory;
+        @Nullable
         private Long weeklyMissionId;
     }
 
