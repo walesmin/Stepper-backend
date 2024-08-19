@@ -1,9 +1,12 @@
 package com.example.stepperbackend.web.controller;
 
 import com.example.stepperbackend.apiPayload.ApiResponse;
+import com.example.stepperbackend.domain.Member;
 import com.example.stepperbackend.jwt.JWTUtil;
+import com.example.stepperbackend.repository.MemberRepository;
 import com.example.stepperbackend.service.MemberService.MemberService;
 import com.example.stepperbackend.service.S3Service;
+import com.example.stepperbackend.web.dto.CustomMemberDetails;
 import com.example.stepperbackend.web.dto.MemberDto;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.servlet.http.HttpServletRequest;
@@ -15,6 +18,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -34,6 +38,8 @@ public class MemberController {
     private final JWTUtil jwtUtil;
 
     private final S3Service s3Service;
+
+    private final MemberRepository memberRepository;
 
 //    @Operation(summary = "회원가입 API",description = "사용자 회원가입")
 //    @PostMapping("/signup")
@@ -73,6 +79,11 @@ public class MemberController {
 
             String username = authentication.getName();
             log.info("인증된 사용자 이름: {}", username);
+
+            // Firebase 토큰 저장
+            if (dto.getFirebaseToken() != null) {
+                memberService.saveFirebaseToken(username, dto.getFirebaseToken());
+            }
 
             long expirationTimeMs = 60 * 60 * 10L * 1000L;
             String jwt = jwtUtil.createJwt(username, expirationTimeMs);
