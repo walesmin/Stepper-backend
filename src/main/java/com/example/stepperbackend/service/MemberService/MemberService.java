@@ -11,4 +11,7 @@ public interface MemberService {
     void deleteMember(String email);
 
     MemberDto.MemberResponseDto getMemberInfo(String email);
+
+    // Firebase 토큰 저장 메서드
+    void saveFirebaseToken(String email, String firebaseToken);
 }

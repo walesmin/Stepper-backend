@@ -6,6 +6,7 @@ import com.example.stepperbackend.jwt.JWTUtil;
 import com.example.stepperbackend.repository.MemberRepository;
 import com.example.stepperbackend.service.MemberService.MemberService;
 import com.example.stepperbackend.service.S3Service;
+import com.example.stepperbackend.web.dto.CustomMemberDetails;
 import com.example.stepperbackend.web.dto.MemberDto;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.servlet.http.HttpServletRequest;
@@ -79,13 +80,9 @@ public class MemberController {
             String username = authentication.getName();
             log.info("인증된 사용자 이름: {}", username);
 
-            // 인증된 사용자 정보를 Member 객체로 캐스팅
-            Member member = (Member) authentication.getPrincipal();
-
-            // Firebase 토큰 저장 (null 체크 후)
+            // Firebase 토큰 저장
             if (dto.getFirebaseToken() != null) {
-                member.setFirebaseToken(dto.getFirebaseToken());
-                memberRepository.save(member); // Firebase 토큰 업데이트
+                memberService.saveFirebaseToken(username, dto.getFirebaseToken());
             }
 
             long expirationTimeMs = 60 * 60 * 10L * 1000L;

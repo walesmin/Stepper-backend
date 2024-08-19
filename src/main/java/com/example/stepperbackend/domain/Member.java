@@ -48,6 +48,7 @@ public class Member extends BaseEntity {
 
     private boolean perAgree;
 
+    @Getter
     @Setter
     private String firebaseToken;
 

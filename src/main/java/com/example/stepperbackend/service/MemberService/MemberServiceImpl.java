@@ -69,4 +69,12 @@ public class MemberServiceImpl implements MemberService {
             throw new RuntimeException("Member not found");
         }
     }
+
+    // Firebase 토큰 저장 메서드 추가
+    public void saveFirebaseToken(String email, String firebaseToken) {
+        Member member = memberRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("Member not found"));
+        member.setFirebaseToken(firebaseToken);
+        memberRepository.save(member);
+    }
 }
