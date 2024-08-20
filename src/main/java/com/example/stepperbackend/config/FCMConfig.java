@@ -13,20 +13,25 @@ import org.springframework.beans.factory.annotation.Value;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Base64;
 import java.util.List;
 
 @Configuration
 public class FCMConfig {
 
-    @Value("${FIREBASE}") // 환경 변수에서 JSON 문자열을 가져옴
+    // 환경 변수에서 JSON 문자열을 가져옴
+    //@Value("${FIREBASE}")
+    @Value("${FIREBASE_ENCODED}")
     private String firebaseConfig;
 
     @Bean
     FirebaseMessaging firebaseMessaging() throws IOException {
         //ClassPathResource resource = new ClassPathResource("firebase/fcmstepper-firebase-adminsdk-isxl7-3326eb84b9.json");
 
+        byte[] decodedBytes = Base64.getDecoder().decode(firebaseConfig);
         // 환경 변수에서 가져온 JSON 문자열을 InputStream으로 변환
-        InputStream refreshToken = new ByteArrayInputStream(firebaseConfig.getBytes());
+        //InputStream refreshToken = new ByteArrayInputStream(firebaseConfig.getBytes());
+        InputStream refreshToken = new ByteArrayInputStream(decodedBytes);
 
         //InputStream refreshToken = resource.getInputStream();
 
