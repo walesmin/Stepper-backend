@@ -26,10 +26,7 @@ public class PostConverter {
                 .build();
     }
 
-    public static PostDto.PostResponseDto toDto(Post post, List<Image> imageList) {
-        List<ImageDto.ImageResponseDto> imageDtoList = imageList.stream()
-                .map(ImageConverter::toDto).collect(Collectors.toList());
-
+    public static PostDto.PostResponseDto toDto(Post post) {
         return PostDto.PostResponseDto.builder()
                 .id(post.getId())
                 //.imageUrl(post.getImageUrl())
@@ -41,7 +38,6 @@ public class PostConverter {
                 .weeklyMissionTitle(post.getWeeklyMission() != null ? post.getWeeklyMission().getMissionTitle() : null)
                 .createdAt(post.getCreatedAt())
                 .updatedAt(post.getUpdatedAt())
-                .imageList(imageDtoList)
                 .build();
     }
 

@@ -52,20 +52,23 @@ public class PostServiceImpl implements PostService {
         postRepository.save(post);
 
         //이미지 저장
-        List<Image> imageList = imageUrlList.stream()
-                .map(imageUrl -> {
-                    Image image = ImageConverter.toEntity(imageUrl, post);
-                    return imageRepository.save(image);
-                })
-                .collect(Collectors.toList());
-        post.setImageList(imageList);
+        List<Image> imageList = null;
+        if (imageUrlList != null) {
+            imageList = imageUrlList.stream()
+                    .map(imageUrl -> {
+                        Image image = ImageConverter.toEntity(imageUrl, post);
+                        return imageRepository.save(image);
+                    })
+                    .collect(Collectors.toList());
+            post.setImageList(imageList);
+        }
 
         // 첫 커뮤니티 게시글 작성 완료
         if (postRepository.getCountByMember(member) == 1) {
             badgeService.putFirstBadge("첫 게시글 작성 완료", member);
         }
 
-        return PostConverter.toDto(post, imageList);
+        return PostConverter.toDto(post);
     }
 
     @Override
