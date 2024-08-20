@@ -142,7 +142,7 @@ public class PostServiceImpl implements PostService {
                     int scraps = scrapRepository.getCountByPost(post);
                     int comments = commentRepository.getCountByPost(post);
                     List<Image> imageList = imageRepository.findAllByPost(post);
-                    return PostConverter.toViewDto(post, scraps, likes, comments, imageList);
+                    return PostConverter.toViewDto(post, likes, scraps, comments, imageList);
                 })
                 .collect(Collectors.toList());
 
