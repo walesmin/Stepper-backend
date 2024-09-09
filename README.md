@@ -38,6 +38,8 @@
     <img src="https://img.shields.io/badge/github%20actions-2088FF?style=for-the-badge&logo=githubactions&logoColor=white">
 </div>
 
+<br/>
+
 <h3>Development</h3>
 <div>
     <img src="https://img.shields.io/badge/mysql-4479A1.svg?style=for-the-badge&logo=mysql&logoColor=white">
