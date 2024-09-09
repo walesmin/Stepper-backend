@@ -56,7 +56,7 @@
 |민경빈|이호준|임효진|최정윤|
 |:--:|:--:|:--:|:--:|
 |<img src="https://avatars.githubusercontent.com/walesmin" width="100" height="100">|<img src="https://avatars.githubusercontent.com/lehojun" width="100" height="100">|<img src="https://avatars.githubusercontent.com/hyojin425" width="100" height="100">|<img src="https://avatars.githubusercontent.com/naoeveee" width="100" height="100">|
-|[walesmin](https://github.com/walesmin)|[lehojun](https://github.com/lehojun)|[hyojin425](https://github.com/hyojin425)|[naoevee](https://github.com/naoeveee)|
+|[walesmin](https://github.com/walesmin)|[lehojun](https://github.com/lehojun)|[hyojin425](https://github.com/hyojin425)|[naoeveee](https://github.com/naoeveee)|
 
 
 
