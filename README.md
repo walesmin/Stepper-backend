@@ -54,6 +54,7 @@
 <h2>Architecture</h2>
 <div>
    
+![1stepper drawio](https://github.com/user-attachments/assets/8db013de-b61b-455d-bb05-f9d2e6c6b29a)
 </div>
 
 
