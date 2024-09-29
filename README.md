@@ -51,6 +51,13 @@
 
 <br/><br/>
 
+<h2>Architecture</h2>
+<div>
+   
+</div>
+
+
+
 <h2>Member</h2>
 
 |민경빈|이호준|임효진|최정윤|
